@@ -1,1 +1,10 @@
-{{yield}}
+<div class="pop-over" ...attributes>
+  {{yield (hash
+    trigger=(component "pop-over/trigger" handleTriggerClick=this.togglePopOver)
+    content=(component "pop-over/content" isOpen=this.isOpen isClosing=this.isClosing removePopOver=this.removePopOver)
+    isOpen=this.isOpen
+    togglePopOver=this.togglePopOver
+    openPopOver=this.openPopOver
+    closePopOver=this.closePopOver
+  )}}
+</div>

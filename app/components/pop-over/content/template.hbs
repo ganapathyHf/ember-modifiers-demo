@@ -1,1 +1,17 @@
-{{yield}}
+{{#ember-wormhole to="body" renderInPlace=this.renderInPlace}}
+  <div
+    {{pop-over-modifier animationDelay=250 renderInPlace=this.renderInPlace isOpen=@isOpen isClosing=@isClosing remove=@removePopOver}}
+    ...attributes
+    class="absolute pop-over_content hf-slide-out-down">
+    {{yield}}
+  </div>
+{{/ember-wormhole}}
+
+
+{{!-- <div
+  {{outside-click @removePopOver}}
+  {{escape-press @removePopOver}}
+  ...attributes
+  class="absolute pop-over_content">
+  {{yield}}
+</div> --}}
