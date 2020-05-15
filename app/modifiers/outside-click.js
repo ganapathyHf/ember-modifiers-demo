@@ -1,15 +1,24 @@
-import { modifier } from "ember-modifier";
+import { modifier } from 'ember-modifier';
 
 export default modifier((element, [callback]) => {
-  function handleClick(event) {
-    if (!element.contains(event.target)) {
-      callback();
-    }
-  }
+	function handleClick(event) {
+		if (!element.contains(event.target)) {
+			callback();
+		}
+	}
 
-  document.addEventListener("click", handleClick);
+	function handleKeyDown(event) {
+		if (event.keyCode === 27) {
+			callback();
+		}
+	}
 
-  return () => {
-    document.removeEventListener("click", handleClick);
-  };
+	document.addEventListener('click', handleClick);
+	document.addEventListener('keydown', handleKeyDown);
+
+	return () => {
+		document.removeEventListener('click', handleClick);
+		document.removeEventListener('keydown', handleKeyDown);
+	};
+
 });

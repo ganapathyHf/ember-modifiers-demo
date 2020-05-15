@@ -7,10 +7,10 @@ export default class PopOverModifier extends Modifier {
 
 	didInstall() {
 		document.addEventListener('click', this.handleClick);
-		document.addEventListener('keydown', this.handleKeydown);
+		document.addEventListener('keydown', this.handleKeyDown);
 	}
 
-  didReceiveArguments() {
+	didReceiveArguments() {
 		const { isOpen, isClosing, remove, animationDelay, renderInPlace } = this.args.named;
 		this.isOpen = isOpen;
 		this.isClosing = isClosing;
@@ -23,24 +23,19 @@ export default class PopOverModifier extends Modifier {
 			const { element } = this;
 			const parentElement = document.getElementById(element.dataset.parentId);
 			this.adjustPopOver(element, parentElement, renderInPlace);
-			this.animatePopOver(this.element);
+			this.animatePopOver(element);
 		}
-  }
-
-	animatePopOver = (popOverContent) => {
-    popOverContent.classList.remove('hf-slide-out-down');
-    popOverContent.classList.add('hf-slide-in-up');
 	}
-	
+
 	adjustPopOver = (popOverContent, parentElement, renderInPlace) => {
 		if (!renderInPlace) {
 			popOverContent.style.top = `${parentElement.offsetTop + parentElement.offsetHeight + 2}px`;
 			popOverContent.style.left = `${parentElement.offsetLeft}px`;
 		}
-    let windowHeight = window.screen.height;
-    let windowWidth = window.screen.width;
-    let popoverHeight = popOverContent.offsetHeight;
-		let popoverWidth = popOverContent.offsetHeight;
+		let windowHeight = window.screen.height;
+		let windowWidth = window.screen.width;
+		let popOverHeight = popOverContent.offsetHeight;
+		let popOverWidth = popOverContent.width;
 		let topOffset, leftOffset;
 		if (renderInPlace) {
 			topOffset = popOverContent.offsetTop + parentElement.offsetTop + parentElement.offsetHeight;
@@ -49,45 +44,49 @@ export default class PopOverModifier extends Modifier {
 			topOffset = popOverContent.offsetTop;
 			leftOffset = popOverContent.offsetLeft;
 		}
-		if ((windowHeight - topOffset) < popoverHeight && (popoverHeight < topOffset)) {
+		if ((windowHeight - topOffset) < popOverHeight && (popOverHeight < topOffset)) {
 			if (renderInPlace) {
 				popOverContent.style.top = 'inherit';
 				popOverContent.style.bottom = '100%';
 			} else {
-				popOverContent.style.top = `${parentElement.offsetTop - popoverHeight - 2}px`;
+				popOverContent.style.top = `${parentElement.offsetTop - popOverHeight - 2}px`;
 			}
 		}
-		if (windowWidth > popoverWidth && (windowWidth - leftOffset) < popoverWidth) {
+		if (windowWidth > popOverWidth && (windowWidth - leftOffset) < popOverWidth) {
 			if (renderInPlace) {
-				let newLeft = windowWidth - (popoverWidth + leftOffset);
+				let newLeft = windowWidth - (popOverWidth + leftOffset);
 				popOverContent.style.left = newLeft;
 			}
 		}
 	};
-	
-	handleClick = (event) => {
-    if ((this.element && !this.element.contains(event.target)) || event.target.dataset.popOver === 'close') {
-      this.handleClose(this.element);
-    }
-  }
 
-  handleKeydown = (event) => {
-    if (this.element && event.keyCode === 27) {
-      this.handleClose(this.element);
-    }
+	animatePopOver = (popOverContent) => {
+		popOverContent.classList.remove('hf-slide-out-down');
+		popOverContent.classList.add('hf-slide-in-up');
+	};
+
+	handleKeyDown = (event) => {
+		if (this.element && event.keyCode === 27) {
+			this.handleClose(this.element);
+		}
 	}
-	
+
+	handleClick = (event) => {
+		if ((this.element && !this.element.contains(event.target)) || event.target.dataset.popOver === 'close') {
+			this.handleClose(this.element);
+		}
+	}
+
+	handleClose = (element) => {
+		element.classList.remove('hf-slide-in-up');
+		element.classList.add('hf-slide-out-down');
+		setTimeout(() => {
+			this.remove();
+		}, this.animationDelay);
+	};
+
 	willRemove() {
 		document.removeEventListener('click', this.handleClick);
-		document.removeEventListener('keydown', this.handleKeydown);
+		document.removeEventListener('keydown', this.handleKeyDown);
 	}
-
-  handleClose = (element) => {
-    element.classList.remove('hf-slide-in-up');
-    element.classList.add('hf-slide-out-down');
-    setTimeout(() => {
-			this.remove();
-			this.popOverContent = null;
-    }, this.animationDelay);
-  }
 }

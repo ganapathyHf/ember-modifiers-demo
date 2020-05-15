@@ -5,6 +5,6 @@ export default class PopOverTriggerComponent extends Component {
 	@action
 	handleTriggerClick(e) {
 		e.stopPropagation();
-		this.args.handleTriggerClick(e);
+		this.args.handleTriggerClick();
 	}
 }

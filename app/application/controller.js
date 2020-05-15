@@ -1,17 +1,21 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 export default class ApplicationController extends Controller {
+
 	@tracked selectedCategory = null;
+
 	get categories() {
 		return [
 			'Fashion',
 			'Groceries',
 			'Industrial',
+			'Sports',
+			'Fitness',
 			'Kids',
 			'New Borns',
-			'Fitness'
+			'Sanitizers'
 		]
 	}
 
@@ -19,4 +23,5 @@ export default class ApplicationController extends Controller {
 	onCategorySelect(category) {
 		this.selectedCategory = category;
 	}
+
 }

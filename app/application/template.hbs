@@ -1,25 +1,18 @@
 <h2 id="title" class="text-gray-900 text-center mt-2 text-lg font-extrabold">Ember Modifiers demo</h2>
 
-
-{{!-- Show how to close popover from the action in controller --}}
 <PopOver class="absolute" id="js_pop-over_1" as |popOver|>
-  <popOver.trigger class="w-48">
+  <popOver.trigger>
     {{#if selectedCategory}}
       {{selectedCategory}}
     {{else}}
-      Select Category
+        Select Category
     {{/if}}
   </popOver.trigger>
   {{#if popOver.isOpen}}
-    <popOver.content @renderInPlace=false data-parent-id="js_pop-over_1" class="flex flex-col justify-center w-48 border border-gray-600 bg-white">
-      {{#each categories as |category|}}
-        <div class="p-2 flex items-center border-b border-gray-600 cursor-pointer" 
-          data-pop-over="close" {{on "click" (fn this.onCategorySelect category)}}>
-          {{category}}
-        </div>
+    <popOver.content @renderInPlace=true data-parent-id="js_pop-over_1" class="flex flex-col justify-center w-48 border border-gray-600 bg-white">
+      {{#each this.categories as |category|}}
+        <div data-pop-over="close" class="p-2 flex items-center border-b border-gray-600 cursor-pointer" {{on "click" (fn this.onCategorySelect category)}}>{{category}}</div>
       {{/each}}
     </popOver.content>
   {{/if}}
 </PopOver>
-
-{{!-- <Input {{autofocus}} class="border border-grey-light w-30 p-1 rounded mb-4 focus:outline-none focus:border-blue-400"/> --}}
