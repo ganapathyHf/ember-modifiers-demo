@@ -35,7 +35,7 @@ export default class PopOverModifier extends Modifier {
 		let windowHeight = window.screen.height;
 		let windowWidth = window.screen.width;
 		let popOverHeight = popOverContent.offsetHeight;
-		let popOverWidth = popOverContent.width;
+		let popOverWidth = popOverContent.offsetWidth;
 		let topOffset, leftOffset;
 		if (renderInPlace) {
 			topOffset = popOverContent.offsetTop + parentElement.offsetTop + parentElement.offsetHeight;
@@ -53,9 +53,11 @@ export default class PopOverModifier extends Modifier {
 			}
 		}
 		if (windowWidth > popOverWidth && (windowWidth - leftOffset) < popOverWidth) {
+			let newLeft = windowWidth - (popOverWidth + leftOffset);
 			if (renderInPlace) {
-				let newLeft = windowWidth - (popOverWidth + leftOffset);
-				popOverContent.style.left = newLeft;
+				popOverContent.style.left = `${newLeft}px`;
+			} else {
+				popOverContent.style.left = `${parentElement.offsetLeft + newLeft}px`;
 			}
 		}
 	};
